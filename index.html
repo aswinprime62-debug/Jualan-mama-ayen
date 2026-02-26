@@ -1,113 +1,163 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JUALAN MAMA AYEN</title>
-
-<style>
+<title>KEDAI MAMA AYEN</title><style>
 body{
     margin:0;
-    font-family: Arial, sans-serif;
-    background:#f4fff6;
-    color:#1f2937;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
 }
-
 .header{
     background:#16a34a;
     color:white;
     text-align:center;
     padding:35px 20px;
 }
-
-.header h1{
-    margin:0;
-    font-size:32px;
-}
-
-.header p{
-    margin-top:8px;
-    font-size:16px;
-    opacity:0.9;
-}
-
+.header h1{margin:0;font-size:28px;}
 .container{
-    max-width:500px;
+    max-width:520px;
     margin:20px auto;
-    padding:0 15px;
+    padding:15px;
 }
-
 .card{
     background:white;
-    border-radius:14px;
     padding:16px;
-    margin-bottom:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+.card h3{margin:0 0 10px;}
+.item{
     display:flex;
     justify-content:space-between;
+    margin-bottom:8px;
+}
+.qty{
+    width:65px;
+    padding:5px;
+}
+input, textarea, select{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    margin-top:6px;
+    font-size:15px;
+}
+.total{
+    font-size:20px;
+    font-weight:bold;
+    margin:15px 0;
+}
+button{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
     font-size:18px;
     font-weight:bold;
-}
-
-.price{
-    color:#16a34a;
-}
-
-.wa{
-    display:block;
     background:#16a34a;
     color:white;
-    text-align:center;
-    padding:16px;
-    border-radius:12px;
-    text-decoration:none;
-    font-weight:bold;
-    font-size:18px;
-    margin:10px 0;
 }
-
-.wa:hover{
-    background:#15803d;
-}
-
+button:hover{background:#15803d;}
 .footer{
     text-align:center;
     padding:20px;
-    color:#6b7280;
     font-size:14px;
+    color:#6b7280;
 }
-</style>
-</head>
+</style></head><body><div class="header">
+<h1>KEDAI MAMA AYEN</h1>
+<p>Pilih Menu & Cara Pengambilan 💚</p>
+</div><div class="container"><div class="card">
+<h3>Data Pembeli</h3>
+<input type="text" id="nama" placeholder="Nama lengkap">
+<textarea id="alamat" placeholder="Alamat lengkap (isi jika pilih kirim)"></textarea>
+<select id="metode">
+<option value="Ambil Sendiri">Ambil Sendiri</option>
+<option value="Kirim">Kirim ke Alamat</option>
+</select>
+</div><div class="card">
+<h3>Menu</h3>
+<div class="item">Risol (1.000)
+<input class="qty" type="number" id="risol" value="0" min="0"></div>
+<div class="item">Lumpiah (1.000)
+<input class="qty" type="number" id="lumpiah" value="0" min="0"></div>
+<div class="item">Panada (1.000)
+<input class="qty" type="number" id="panada" value="0" min="0"></div>
+<div class="item">Pai Susu (2.000)
+<input class="qty" type="number" id="paisusu" value="0" min="0"></div>
+<div class="item">Es Pisang Ijo (5.000)
+<input class="qty" type="number" id="pisangijo" value="0" min="0"></div>
+<div class="item">Es Teler (5.000)
+<input class="qty" type="number" id="esteler" value="0" min="0"></div>
+</div><div class="total">
+Total: Rp <span id="total">0</span>
+</div><button onclick="order()">BUY SEKARANG</button>
 
-<body>
+</div><div class="footer">
+Terima kasih sudah order di Kedai Mama Ayen 💚
+</div><script>
+const prices={
+risol:1000,lumpiah:1000,panada:1000,
+paisusu:2000,pisangijo:5000,esteler:5000
+};
 
-<div class="header">
-    <h1>JUALAN MAMA AYEN</h1>
-    <p>Takjil Murah • Enak • Siap Buka Puasa 🌙</p>
-</div>
+document.querySelectorAll(".qty").forEach(i=>{
+i.addEventListener("input",hitung);
+});
 
-<div class="container">
+function hitung(){
+let total=0;
+for(let id in prices){
+let q=parseInt(document.getElementById(id).value)||0;
+total+=q*prices[id];
+}
+document.getElementById("total").innerText=total.toLocaleString("id-ID");
+}
 
-    <div class="card">Risol <span class="price">Rp1.000</span></div>
-    <div class="card">Lumpiah <span class="price">Rp1.000</span></div>
-    <div class="card">Panada <span class="price">Rp1.000</span></div>
-    <div class="card">Pai Susu <span class="price">Rp2.000</span></div>
-    <div class="card">Es Pisang Ijo <span class="price">Rp5.000</span></div>
-    <div class="card">Es Teler <span class="price">Rp5.000</span></div>
+function order(){
+let nama=document.getElementById("nama").value.trim();
+let alamat=document.getElementById("alamat").value.trim();
+let metode=document.getElementById("metode").value;
 
-    <a class="wa" href="https://wa.me/6282197794334">
-        📲 Pesan via WhatsApp 1
-    </a>
+if(!nama){
+alert("Isi nama dulu ya 🙂");
+return;
+}
 
-    <a class="wa" href="https://wa.me/6285143650168">
-        📲 Pesan via WhatsApp 2
-    </a>
+if(metode==="Kirim" && !alamat){
+alert("Isi alamat untuk pengiriman 🙂");
+return;
+}
 
-</div>
+let pesan="Halo KEDAI MAMA AYEN,%0ASaya mau pesan:%0A%0A";
+let total=0;
 
-<div class="footer">
-    Terima kasih sudah membeli 💚
-</div>
+for(let id in prices){
+let q=parseInt(document.getElementById(id).value)||0;
+if(q>0){
+pesan+="• "+id+" x"+q+"%0A";
+total+=q*prices[id];
+}
+}
 
-</body>
+if(total===0){
+alert("Pilih menu dulu ya 🙂");
+return;
+}
+
+pesan+="%0ATotal: Rp "+total.toLocaleString("id-ID");
+pesan+="%0A%0AMetode: "+metode;
+pesan+="%0ANama: "+nama;
+
+if(metode==="Kirim"){
+pesan+="%0AAlamat: "+alamat;
+}
+
+let nomor="6282197794334";
+window.location.href="https://wa.me/"+nomor+"?text="+pesan;
+}
+</script></body>
 </html>
